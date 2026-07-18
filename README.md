@@ -1,4 +1,4 @@
-# AI Product Intelligence System — Day 2 Homework
+# AI Product Intelligence System 
 
 Extends the base product-intelligence system with three advanced features, all
 built on a shared CLIP embedding backbone:

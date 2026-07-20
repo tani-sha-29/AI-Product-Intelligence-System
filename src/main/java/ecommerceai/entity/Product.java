@@ -21,37 +21,37 @@ public class Product{
     public void setId(Long id){
         this.id=id;
     }
-    public long getid(){
+    public long getId(){
         return id;
     }
     public void setName(String name){
         this.name=name;
     }
-    public String getname(){
+    public String getName(){
         return name;
     }
-    public void setdescription(String description){
+    public void setDescription(String description){
         this.description=description;
     }
-    public String getdescription(){
+    public String getDescription(){
         return description;
     }
-    public void setcategory(String category){
+    public void setCategory(String category){
         this.category=category;
     }
-    public String getcategory(){
+    public String getCategory(){
         return category;
     }
-    public void setprice(Double price){
+    public void setPrice(Double price){
         this.price=price;
     }
-    public Double getprice(){
+    public Double getPrice(){
         return price;
     }
-    public void setimage(String image){
+    public void setImage(String image){
         this.image=image;
     }
-    public String getimage(){
+    public String getImage(){
         return image;
     }
 

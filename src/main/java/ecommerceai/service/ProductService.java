@@ -29,7 +29,10 @@ public class ProductService implements IProductService {
 
     @Override
     public String updateProduct(Product product) {
-        repo.save(product);
+        Optional<Product> existingProduct = repo.findById(product.getId());
+        if(existingProduct.isPresent())
+            repo.save(product);
+
         return "Product updated successfully";
     }
 

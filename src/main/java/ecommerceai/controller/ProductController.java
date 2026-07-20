@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
-@Tag(name="Product Controller", description = "APIs for managing products")
+@Tag(name="Product Controller", description = "Endpoints for creating and modifying products")
 public class ProductController {
 
     ProductService productService;

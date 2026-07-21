@@ -10,7 +10,12 @@ public interface IProductService {
     String addProduct(Product product);
     String updateProduct(Product product);
     String deleteProduct(Long id);
-    Product bygetId(Long id);
-    //public List<Product> getCheapestProducts()
+    Product getProductById(Long id);
+    List<Product> getCheapestProducts();
+    List<Product>getProductByCategory(String category);
+    List<Product>findByPriceBetween(Double minPrice, Double maxPrice);
+    List<Product>findByDescriptionIs(String keyword);
+
+
 
 }

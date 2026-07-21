@@ -43,7 +43,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product bygetId(Long id) {
+    public Product getProductById(Long id) {
         Optional<Product> exist = repo.findById(id);
         if(exist.isPresent()){
             return exist.get();
@@ -51,7 +51,25 @@ public class ProductService implements IProductService {
         return null;
         }
 
+    @Override
+    public List<Product> getCheapestProducts() {
+        return repo.getCheapestProducts();
+    }
 
+    @Override
+    public List<Product>getProductByCategory(String category) {
+        return repo.findByCategory(category);
+    }
+
+    @Override
+    public List<Product> findByPriceBetween(Double minPrice, Double maxPrice) {
+        return repo.findByPriceBetween(minPrice,maxPrice);
+    }
+
+    @Override
+    public List<Product> findByDescriptionIs(String keyword) {
+        return repo.findByDescriptionIs(keyword);
+    }
 
 
 }

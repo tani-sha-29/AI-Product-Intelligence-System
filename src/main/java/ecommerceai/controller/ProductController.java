@@ -28,6 +28,41 @@ public class ProductController {
        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
     }
 
+    @GetMapping("/product/{id}")
+    @Operation(summary = "Get all the product by ID",description = "Returns The particular product")
+    public ResponseEntity<Product> ProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
+    }
+
+    @GetMapping("/getCategory")
+    @Operation(summary = "Get the Category of product",description = "Returns the products category")
+    public ResponseEntity<List<Product>> getByCategory(@RequestParam String category){
+        List<Product> products= productService.getProductByCategory(category);
+        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    }
+
+    @GetMapping("/getCheaper")
+    @Operation(summary = "Get the Cheaper products",description = "Returns the cheaper products")
+    public ResponseEntity<List<Product>> getCheap(){
+        List<Product> products= productService.getCheapestProducts();
+        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    }
+
+    @GetMapping("/priceRange")
+    @Operation(summary = "Get the products between price range",description = "Returns in range of your budget")
+    public ResponseEntity<List<Product>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice){
+        List<Product> products= productService.findByPriceBetween(minPrice,maxPrice);
+        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    }
+
+    @GetMapping("/searchKeyword")
+    @Operation(summary = "Enter the keyword for your search",description = "Returns based on the keyword")
+    public ResponseEntity<List<Product>> getByKeyword(@RequestParam String keyword){
+        List<Product> products= productService.findByDescriptionIs(keyword);
+        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    }
+
     @PostMapping("/addProduct")
     @Operation(summary = "Add the product",description = "Add the Product from User to Database")
     ResponseEntity<String> addProduct(@RequestBody Product product){

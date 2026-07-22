@@ -5,7 +5,7 @@ import ecommerceai.entity.Product;
 import java.util.List;
 
 public interface IProductService {
-    //get tourist by id
+
     List<Product> getProducts();
     String addProduct(Product product);
     String updateProduct(Product product);

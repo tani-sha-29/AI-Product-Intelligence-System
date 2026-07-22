@@ -1,5 +1,6 @@
 package ecommerceai.controller;
 
+import ecommerceai.dto.response.ApiResponse;
 import ecommerceai.entity.Product;
 import ecommerceai.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,65 +23,141 @@ public class ProductController {
     }
 
     @GetMapping("/allProducts")
-    @Operation(summary = "Get all the products",description = "Returns all the products for your search")
-    public ResponseEntity<List<Product>> getAllProducts(){
-       List products= productService.getProducts();
-       return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    @Operation(
+            summary = "Get all the products",
+            description = "Returns all the products for your search"
+    )
+    public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
+
+        List<Product> products = productService.getProducts();
+
+        ApiResponse<List<Product>> response =
+                new ApiResponse<>(
+                        true,
+                        "Products listed successfully",
+                        products
+                );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/product/{id}")
     @Operation(summary = "Get all the product by ID",description = "Returns The particular product")
-    public ResponseEntity<Product> ProductById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Product>> ProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+
+        ApiResponse<Product> response =
+                new ApiResponse<>(
+                        true,
+                        "Product Added Successfully",
+                        product
+                );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/getCategory")
     @Operation(summary = "Get the Category of product",description = "Returns the products category")
-    public ResponseEntity<List<Product>> getByCategory(@RequestParam String category){
+    public ResponseEntity<ApiResponse<List<Product>>> getByCategory(@RequestParam String category){
         List<Product> products= productService.getProductByCategory(category);
-        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
-    }
+
+        ApiResponse<List<Product>> response =
+                new ApiResponse<>(
+                        true,
+                        "Products listed successfully",
+                        products
+                );
+
+        return ResponseEntity.ok(response);
+     }
+
 
     @GetMapping("/getCheaper")
     @Operation(summary = "Get the Cheaper products",description = "Returns the cheaper products")
-    public ResponseEntity<List<Product>> getCheap(){
+    public ResponseEntity<ApiResponse<List<Product>>> getCheap(){
         List<Product> products= productService.getCheapestProducts();
-        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+        ApiResponse<List<Product>> response =
+                new ApiResponse<>(
+                        true,
+                        "Products listed successfully",
+                        products
+                );
+
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/priceRange")
     @Operation(summary = "Get the products between price range",description = "Returns in range of your budget")
-    public ResponseEntity<List<Product>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice){
+    public ResponseEntity<ApiResponse<List<Product>>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice){
         List<Product> products= productService.findByPriceBetween(minPrice,maxPrice);
-        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+        ApiResponse<List<Product>> response =
+                new ApiResponse<>(
+                        true,
+                        "Products listed successfully",
+                        products
+                );
+
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/searchKeyword")
     @Operation(summary = "Enter the keyword for your search",description = "Returns based on the keyword")
-    public ResponseEntity<List<Product>> getByKeyword(@RequestParam String keyword){
+    public ResponseEntity<ApiResponse<List<Product>>> getByKeyword(@RequestParam String keyword){
         List<Product> products= productService.findByDescriptionIs(keyword);
-        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+        ApiResponse<List<Product>> response =
+                new ApiResponse<>(
+                        true,
+                        "Products listed successfully",
+                        products
+                );
+
+        return ResponseEntity.ok(response);
+
     }
 
     @PostMapping("/addProduct")
-    @Operation(summary = "Add the product",description = "Add the Product from User to Database")
-    ResponseEntity<String> addProduct(@RequestBody Product product){
-        String response = productService.addProduct(product);
-        return new ResponseEntity<String>(response,HttpStatus.CREATED);
+    @Operation(summary = "Add the product", description = "Add the Product from User to Database")
+    public ResponseEntity<ApiResponse<String>> addProduct(@RequestBody Product product) {
+        String message = productService.addProduct(product);
+
+        ApiResponse<String> response = new ApiResponse<>(
+                true,
+                "Product added successfully",
+                message
+        );
+
+        return ResponseEntity.ok(response);
     }
+
     @PutMapping("/updateProduct")
     @Operation(summary = "Update the product",description = "Updates the fields")
-    ResponseEntity<String> updateProduct(@RequestBody  Product product){
-        String response=productService.updateProduct(product);
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    ResponseEntity<ApiResponse<String>> updateProduct(@RequestBody  Product product){
+        String message=productService.updateProduct(product);
+        ApiResponse<String> response = new ApiResponse<>(
+                true,
+                "Product added successfully",
+                 message
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 
     @DeleteMapping("/deleteProduct/{id}")
     @Operation(summary = "Deletes the product",description = "Delete the product by id")
-    ResponseEntity<String> delete(@PathVariable Long id){
-        String response=productService.deleteProduct(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    ResponseEntity<ApiResponse<String>> delete(@PathVariable Long id){
+        String message=productService.deleteProduct(id);
+        ApiResponse<String> response = new ApiResponse<>(
+                true,
+                "Product added successfully",
+                message
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 
 

@@ -22,7 +22,7 @@ public class ProductController {
         this.productService=productService;
     }
 
-    @GetMapping("/allProducts")
+    @GetMapping("/Products")
     @Operation(
             summary = "Get all the products",
             description = "Returns all the products for your search"
@@ -42,7 +42,9 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    @Operation(summary = "Get all the product by ID",description = "Returns The particular product")
+    @Operation( summary = "Get all the product by ID",
+            description = "Returns The particular product"
+    )
     public ResponseEntity<ApiResponse<Product>> ProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
 
@@ -57,8 +59,10 @@ public class ProductController {
                 .body(response);
     }
 
-    @GetMapping("/getCategory")
-    @Operation(summary = "Get the Category of product",description = "Returns the products category")
+    @GetMapping("/ProductsByCategory")
+    @Operation(summary = "Get the Category of product",
+            description = "Returns the products category"
+    )
     public ResponseEntity<ApiResponse<List<Product>>> getByCategory(@RequestParam String category){
         List<Product> products= productService.getProductByCategory(category);
 
@@ -74,7 +78,9 @@ public class ProductController {
 
 
     @GetMapping("/getCheaper")
-    @Operation(summary = "Get the Cheaper products",description = "Returns the cheaper products")
+    @Operation(summary = "Get the Cheaper products",
+            description = "Returns the cheaper products"
+    )
     public ResponseEntity<ApiResponse<List<Product>>> getCheap(){
         List<Product> products= productService.getCheapestProducts();
         ApiResponse<List<Product>> response =
@@ -89,7 +95,9 @@ public class ProductController {
 
 
     @GetMapping("/priceRange")
-    @Operation(summary = "Get the products between price range",description = "Returns in range of your budget")
+    @Operation(summary = "Get the products between price range",
+            description = "Returns in range of your budget"
+    )
     public ResponseEntity<ApiResponse<List<Product>>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice){
         List<Product> products= productService.findByPriceBetween(minPrice,maxPrice);
         ApiResponse<List<Product>> response =
@@ -104,7 +112,9 @@ public class ProductController {
 
 
     @GetMapping("/searchKeyword")
-    @Operation(summary = "Enter the keyword for your search",description = "Returns based on the keyword")
+    @Operation(summary = "Enter the keyword for your search",
+            description = "Returns based on the keyword"
+    )
     public ResponseEntity<ApiResponse<List<Product>>> getByKeyword(@RequestParam String keyword){
         List<Product> products= productService.findByDescriptionIs(keyword);
         ApiResponse<List<Product>> response =
@@ -119,7 +129,9 @@ public class ProductController {
     }
 
     @PostMapping("/addProduct")
-    @Operation(summary = "Add the product", description = "Add the Product from User to Database")
+    @Operation(summary = "Add the product",
+            description = "Add the Product from User to Database"
+    )
     public ResponseEntity<ApiResponse<String>> addProduct(@RequestBody Product product) {
         String message = productService.addProduct(product);
 
@@ -133,7 +145,9 @@ public class ProductController {
     }
 
     @PutMapping("/updateProduct")
-    @Operation(summary = "Update the product",description = "Updates the fields")
+    @Operation(summary = "Update the product",
+            description = "Updates the fields"
+    )
     ResponseEntity<ApiResponse<String>> updateProduct(@RequestBody  Product product){
         String message=productService.updateProduct(product);
         ApiResponse<String> response = new ApiResponse<>(
@@ -147,7 +161,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-    @Operation(summary = "Deletes the product",description = "Delete the product by id")
+    @Operation(summary = "Deletes the product",
+            description = "Delete the product by id"
+    )
     ResponseEntity<ApiResponse<String>> delete(@PathVariable Long id){
         String message=productService.deleteProduct(id);
         ApiResponse<String> response = new ApiResponse<>(
@@ -155,11 +171,7 @@ public class ProductController {
                 "Product added successfully",
                 message
         );
-
         return ResponseEntity.ok(response);
-
     }
-
-
 
 }

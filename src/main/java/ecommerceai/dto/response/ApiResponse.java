@@ -19,22 +19,22 @@ public class ApiResponse<T>{
         }
 
         // getters and setters
-        void setSuccess(boolean success) {
+        public void setSuccess(boolean success) {
             this.success = success;
         }
-        void setMessage(String message) {
+        public void setMessage(String message) {
             this.message = message;
         }
-        void setData(T data) {
+        public void setData(T data) {
             this.data = data;
         }
-        boolean getSuccess() {
+        public boolean isSuccess() {
             return success;
         }
-        String getMessage() {
+        public String getMessage() {
             return message;
         }
-        T getData() {
+        public T getData() {
             return data;
         }
 

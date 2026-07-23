@@ -1,12 +1,12 @@
 package ecommerceai.service;
 
+import ecommerceai.dto.request.LoginRequest;
+import ecommerceai.dto.request.RegisterUserRequest;
+import ecommerceai.dto.response.UserResponse;
 import ecommerceai.entity.User;
 
 public interface IUserService {
-    String addUser(User user);
-    String login(User user);
+    UserResponse addUser(RegisterUserRequest user);
+    UserResponse login(LoginRequest login);
     String logout(User user);
-    String setProfile(User user);
-    String updateProfile(User user);
-
 }

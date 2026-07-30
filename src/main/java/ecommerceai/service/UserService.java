@@ -4,7 +4,9 @@ import ecommerceai.dto.request.LoginRequest;
 import ecommerceai.dto.request.RegisterUserRequest;
 import ecommerceai.dto.response.UserResponse;
 import ecommerceai.entity.User;
+import ecommerceai.repository.IProductRepo;
 import ecommerceai.repository.IUserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,10 +14,13 @@ import java.time.LocalDateTime;
 @Service
 public class UserService implements IUserService {
 
+    @Autowired
+    IProductRepo repo;
+
     IUserRepo userRepo;
 
-    public UserService(IUserRepo userRepo){
-        this.userRepo=userRepo;
+    public UserService(IUserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -46,7 +51,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse login(LoginRequest login) {
-        User user=userRepo.findByEmail(login.getEmail()).orElseThrow(() ->
+        User user = userRepo.findByEmail(login.getEmail()).orElseThrow(() ->
                 new RuntimeException("User does not exist"));
 
         if (!user.getPassword().equals(user.getPassword())) {
@@ -63,7 +68,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String logout(User user) {
-        return "Logout Successful";
+    public String logout(Long id) {
+        repo. deleteById(id);
+        return null;
     }
 }
+
+

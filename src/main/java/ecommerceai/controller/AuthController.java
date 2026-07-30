@@ -57,8 +57,25 @@ public class AuthController {
                 );
 
         return ResponseEntity.ok(response);
+    }
 
+    @PostMapping("/Logout")
+    @Operation(
+            summary = "Log out a user",
+            description = "Log out"
+    )
+    public ResponseEntity<ApiResponse<String>> logout(@PathVariable Long id) {
 
+        String us=userService.logout(id);
+
+        ApiResponse<String> response =
+                new ApiResponse<String>(
+                        true,
+                        "User Logged out",
+                        us
+                );
+
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -1,7 +1,7 @@
 package ecommerceai.repository;
 
-import ecommerceai.entity.Cart;
+import ecommerceai.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ICartRepo extends JpaRepository<Cart,Long> {
+public interface ICartRepo extends JpaRepository<CartItem,Long> {
 }

@@ -19,7 +19,12 @@ public class CartItem {
 
     //getters and setters
 
-    public CartItem() {}
+    public CartItem() {};
+
+    public CartItem(Integer quantity, Double itemPrice) {
+        this.quantity = quantity;
+        this.itemPrice = itemPrice;
+    }
 
     public Long getId() {
         return id;

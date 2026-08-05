@@ -22,7 +22,7 @@ public class ProductController {
         this.productService=productService;
     }
 
-    @GetMapping("/Products")
+    @GetMapping("/Get-Product")
     @Operation(
             summary = "Get all the products",
             description = "Returns all the products for your search"

@@ -2,10 +2,12 @@ package ecommerceai.service;
 
 import ecommerceai.dto.request.CartRequest;
 import ecommerceai.dto.response.CartResponse;
-import ecommerceai.entity.CartItem;
 
 public interface ICartService {
-    CartResponse getCarts();
-    String addToCart(CartItem cart);
-    String removeFromCart(CartRequest cart);
+    CartResponse getCart(Long UserId);
+    String addToCart(CartRequest request);
+    String removeFromCart(CartRequest request);
+    String updateCart(CartRequest request);
+    String clearCart(Long UserId);
+
 }

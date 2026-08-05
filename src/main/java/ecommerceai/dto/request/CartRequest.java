@@ -1,41 +1,29 @@
 package ecommerceai.dto.request;
 
 public class CartRequest {
-    private Long userId;
-    private Long productId;
-    private Integer quantity;
+    private Long UserId;
+    private Long ProductId;
+    private Integer Quantity;
 
-    public CartRequest() {
+
+    public void setUserId(Long UserId) {
+        this.UserId = UserId;
     }
-
-    public CartRequest(Long userId, Long productId, Integer quantity) {
-        this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
-    }
-
     public Long getUserId() {
-        return userId;
+        return UserId;
     }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setProductId(Long ProductId) {
+        this.ProductId = ProductId;
     }
-
     public Long getProductId() {
-        return productId;
+        return ProductId;
     }
-
-    public void setProductId(Long productId) {
-        this.productId= productId;
+    public void setQuantity(Integer Quantity) {
+        this.Quantity = Quantity;
     }
-
     public Integer getQuantity() {
-        return quantity;
+        return Quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+
 }
-

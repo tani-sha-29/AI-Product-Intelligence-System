@@ -1,18 +1,40 @@
 package ecommerceai.entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Product{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    @Column(nullable = false)
+    @Size(min = 1)
     private String name;
+
+    @NotBlank
+    @Size(min = 5)
     private String description;
+
+    @NotBlank
+    @Size(min = 1)
     private String category;
+
+    @NotBlank
+    @Size(min = 1)
+    private Integer categoryId;
+
+    @NotBlank
+    @Size(min = 1)
+    @Email
     private Double price;
+
+    @NotNull
     private String image;
 
     public Product(){

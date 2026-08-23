@@ -2,6 +2,8 @@ package ecommerceai.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,10 +14,14 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private Long id;
 
+    @Positive
+    @NotNull
     private Double totalPrice;
 
+    @Positive
     private Integer totalItems;
 
     private LocalDateTime createdAt;
@@ -24,7 +30,6 @@ public class Cart {
 
     // One cart belongs to one user
     @OneToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     // One cart contains many cart items

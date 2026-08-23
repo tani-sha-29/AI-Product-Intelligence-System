@@ -1,6 +1,7 @@
 package ecommerceai.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -9,18 +10,27 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    @NotNull
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank
+    @Min(2) @Max(100)
     private String name;
 
     @Column(nullable = false, unique = true)
+    @NotBlank
+    @Email
     private String email;
 
     @Column(nullable = false)
+    @NotBlank
+    @Min(8)
     private String password;
 
     @Column(nullable = false)
+    @NotBlank
     private String role;
 
     @Column(nullable = false)

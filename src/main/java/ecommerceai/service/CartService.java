@@ -6,6 +6,8 @@ import ecommerceai.entity.Cart;
 import ecommerceai.entity.CartItem;
 import ecommerceai.entity.Product;
 import ecommerceai.entity.User;
+import ecommerceai.exception.ProductNotFoundException;
+import ecommerceai.exception.UserNotFoundException;
 import ecommerceai.repository.ICartItemRepo;
 import ecommerceai.repository.ICartRepo;
 import ecommerceai.repository.IProductRepo;
@@ -31,10 +33,10 @@ public class CartService implements ICartService{
 
     @Override
     public CartResponse getCart(Long UserId) {
-        User user=userRepo.findById(UserId).orElseThrow(()->new RuntimeException(
+        User user=userRepo.findById(UserId).orElseThrow(()->new UserNotFoundException(
                 "User Not Found"
         ));
-        Cart cart =cartRepo.findByUser(UserId).orElseThrow(()->new RuntimeException(
+        Cart cart =cartRepo.findByUserId(UserId).orElseThrow(()->new RuntimeException(
                 "Cart Not Found"
         ));
 
@@ -50,16 +52,16 @@ public class CartService implements ICartService{
 
     @Override
     public String addToCart(CartRequest request) {
-        User user= userRepo.findById(request.getUserId()).orElseThrow(()->new RuntimeException(
+        User user= userRepo.findById(request.getUserId()).orElseThrow(()->new UserNotFoundException(
                 "User Not Registered"
         ));
 
-        Product product=productRepo.findById(request.getProductId()).orElseThrow(()-> new RuntimeException(
+        Product product=productRepo.findById(request.getProductId()).orElseThrow(()-> new ProductNotFoundException(
                 "Product not exist"
         ));
 
 
-        Cart cart =cartRepo.findByUser(request.getUserId()).orElseGet(()->{
+        Cart cart =cartRepo.findByUserId(request.getUserId()).orElseGet(()->{
             Cart newcart=new Cart();
             newcart.setUser(user);
             newcart.setTotalItems(0);
@@ -70,7 +72,7 @@ public class CartService implements ICartService{
         });
 
 
-        CartItem item= cartItemRepo.findByCartAndProduct(cart.getId(),product.getId()).orElse(null);
+        CartItem item= cartItemRepo.findByCartIdAndProductId(cart.getId(),product.getId()).orElse(null);
 
         if(item!=null){
             item.setQuantity(
@@ -81,6 +83,8 @@ public class CartService implements ICartService{
 
         }
         else{
+            item = new CartItem();
+
             item.setCart(cart);
             item.setProduct(product);
             item.setItemPrice(product.getPrice());
@@ -116,16 +120,57 @@ public class CartService implements ICartService{
 
     @Override
     public String removeFromCart(CartRequest request) {
-        return "";
+        User user=userRepo.findById(request.getUserId()).orElseThrow(()->new RuntimeException(
+                "User Not Registered"
+        ));
+        Cart cart=cartRepo.findByUserId(request.getUserId()).orElseThrow(()->new RuntimeException(
+                "Cart Not Found"
+        ));
+
+        Product product=cartItemRepo.findByProductId(request.getProductId()).orElseThrow(()->new RuntimeException(
+                "No Product Found"
+        ));
+
+        CartItem item=cartItemRepo.findByCartIdAndProductId(cart.getId(),product.getId()).orElseThrow(()->new RuntimeException(
+                "Item Not Found"
+        ));
+        cartItemRepo.delete(item);
+        updateCartTotals(cart);
+        return "Product Removed";
     }
 
     @Override
     public String updateCart(CartRequest request) {
-        return "";
+        User user=userRepo.findById(request.getUserId()).orElseThrow(()->new RuntimeException(
+                "User Not Registered"
+        ));
+        Cart cart=cartRepo.findByUserId(request.getUserId()).orElseThrow(()->new RuntimeException(
+                "Cart Not Found"
+        ));
+
+        Product product=cartItemRepo.findByProductId(request.getProductId()).orElseThrow(()->new RuntimeException(
+                "No Product Found"
+        ));
+
+        CartItem item=cartItemRepo.findByCartIdAndProductId(cart.getId(),product.getId()).orElseThrow(()->new RuntimeException(
+                "Item Not Found"
+        ));
+        item.setQuantity(request.getQuantity()+item.getQuantity());
+        cartItemRepo.save(item);
+        updateCartTotals(cart);
+        return "Cart Updated";
     }
 
     @Override
     public String clearCart(Long UserId) {
+        User user=userRepo.findById(UserId).orElseThrow(()->new RuntimeException(
+                "User Not Registered"
+        ));
+        Cart cart=cartRepo.findByUserId(UserId).orElseThrow(()->new RuntimeException(
+                "Cart Not Found"
+        ));
+        cartRepo.delete(cart);
+        updateCartTotals(cart);
         return "";
     }
 }

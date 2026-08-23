@@ -47,7 +47,7 @@ public class ProductController {
     )
     public ResponseEntity<ApiResponse<Product>> ProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
-
+        System.out.println("Controller ID = " + id);
         ApiResponse<Product> response =
                 new ApiResponse<>(
                         true,

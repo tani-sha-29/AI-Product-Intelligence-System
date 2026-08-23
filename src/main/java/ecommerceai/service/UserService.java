@@ -4,6 +4,7 @@ import ecommerceai.dto.request.LoginRequest;
 import ecommerceai.dto.request.RegisterUserRequest;
 import ecommerceai.dto.response.UserResponse;
 import ecommerceai.entity.User;
+import ecommerceai.exception.UserNotFoundException;
 import ecommerceai.repository.IProductRepo;
 import ecommerceai.repository.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,7 @@ public class UserService implements IUserService {
     @Override
     public UserResponse login(LoginRequest login) {
         User user = userRepo.findByEmail(login.getEmail()).orElseThrow(() ->
-                new RuntimeException("User does not exist"));
-
+                new UserNotFoundException("User not found " + login.getEmail()));
         if (!user.getPassword().equals(user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }

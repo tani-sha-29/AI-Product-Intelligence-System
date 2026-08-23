@@ -1,28 +1,42 @@
 package ecommerceai.dto.request;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class CartRequest {
-    private Long UserId;
-    private Long ProductId;
-    private Integer Quantity;
+
+    @NotNull
+    @Positive
+    private Long userId;
+
+    @NotNull
+    @Positive
+    private Long productId;
+
+    @NotNull
+    @Positive
+    @Min(1)
+    private Integer quantity;
 
 
-    public void setUserId(Long UserId) {
-        this.UserId = UserId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     public Long getUserId() {
-        return UserId;
+        return userId;
     }
-    public void setProductId(Long ProductId) {
-        this.ProductId = ProductId;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
     public Long getProductId() {
-        return ProductId;
+        return productId;
     }
-    public void setQuantity(Integer Quantity) {
-        this.Quantity = Quantity;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
     public Integer getQuantity() {
-        return Quantity;
+        return quantity;
     }
 
 

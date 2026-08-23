@@ -1,11 +1,11 @@
 package ecommerceai.service;
 
 import ecommerceai.entity.Product;
+import ecommerceai.exception.ProductNotFoundException;
 import ecommerceai.repository.IProductRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
@@ -29,10 +29,10 @@ public class ProductService implements IProductService {
 
     @Override
     public String updateProduct(Product product) {
-        Optional<Product> existingProduct = repo.findById(product.getId());
-        if(existingProduct.isPresent())
-            repo.save(product);
+        Product existingProduct = repo.findById(product.getId())
+                .orElseThrow(()-> new ProductNotFoundException("Product not found with id : " + product.getId()));
 
+        repo.save(existingProduct);
         return "Product updated successfully";
     }
 
@@ -44,11 +44,11 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        Optional<Product> exist = repo.findById(id);
-        if(exist.isPresent()){
-            return exist.get();
-        }
-        return null;
+        System.out.println("ID = " + id);
+        Product exist = repo.findById(id)
+                .orElseThrow(()-> new ProductNotFoundException("Product not found with id : " + id));
+
+        return exist;
         }
 
     @Override

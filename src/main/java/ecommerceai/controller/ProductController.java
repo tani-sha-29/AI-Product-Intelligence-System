@@ -5,6 +5,10 @@ import ecommerceai.entity.Product;
 import ecommerceai.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +31,15 @@ public class ProductController {
             summary = "Get all the products",
             description = "Returns all the products for your search"
     )
-    public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
+    public ResponseEntity<ApiResponse<Page<Product>>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
 
-        List<Product> products = productService.getProducts();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Page products = productService.getProducts(pageable);
 
-        ApiResponse<List<Product>> response =
+        ApiResponse<Page<Product>> response =
                 new ApiResponse<>(
                         true,
                         "Products listed successfully",
@@ -63,10 +71,14 @@ public class ProductController {
     @Operation(summary = "Get the Category of product",
             description = "Returns the products category"
     )
-    public ResponseEntity<ApiResponse<List<Product>>> getByCategory(@RequestParam String category){
-        List<Product> products= productService.getProductByCategory(category);
+    public ResponseEntity<ApiResponse<Page<Product>>> getByCategory(@RequestParam String category,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size
+                                                                    ){
+        Pageable pageable = PageRequest.of(page, size);
+        Page products= productService.getProductByCategory(category,pageable);
 
-        ApiResponse<List<Product>> response =
+        ApiResponse<Page<Product>> response =
                 new ApiResponse<>(
                         true,
                         "Products listed successfully",
@@ -98,9 +110,12 @@ public class ProductController {
     @Operation(summary = "Get the products between price range",
             description = "Returns in range of your budget"
     )
-    public ResponseEntity<ApiResponse<List<Product>>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice){
-        List<Product> products= productService.findByPriceBetween(minPrice,maxPrice);
-        ApiResponse<List<Product>> response =
+    public ResponseEntity<ApiResponse<Page<Product>>> getPriceRange(@RequestParam Double minPrice,@RequestParam Double maxPrice,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price").ascending());
+        Page products= productService.findByPriceBetween(minPrice,maxPrice,pageable);
+        ApiResponse<Page<Product>> response =
                 new ApiResponse<>(
                         true,
                         "Products listed successfully",
@@ -115,9 +130,12 @@ public class ProductController {
     @Operation(summary = "Enter the keyword for your search",
             description = "Returns based on the keyword"
     )
-    public ResponseEntity<ApiResponse<List<Product>>> getByKeyword(@RequestParam String keyword){
-        List<Product> products= productService.findByDescriptionIs(keyword);
-        ApiResponse<List<Product>> response =
+    public ResponseEntity<ApiResponse<Page<Product>>> getByKeyword(@RequestParam String keyword,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page products= productService.findByDescriptionIs(keyword,pageable);
+        ApiResponse<Page<Product>> response =
                 new ApiResponse<>(
                         true,
                         "Products listed successfully",

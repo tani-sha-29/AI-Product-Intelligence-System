@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
+    @NotBlank
+    private String name;
 
     @NotBlank
     @Email
@@ -14,12 +16,16 @@ public class LoginRequest {
     @Min(8)
     private String password;
 
+
+
     public LoginRequest() {
     }
 
-    public LoginRequest(String email, String password) {
+    public LoginRequest(String name,String email, String password) {
         this.email = email;
         this.password = password;
+        this.name = name;
+
     }
 
     public String getEmail() {
@@ -37,5 +43,13 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String username) {
+        this.name = name;
+    }
+
 
 }

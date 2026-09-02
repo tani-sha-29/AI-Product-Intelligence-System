@@ -1,17 +1,30 @@
 package ecommerceai.dto.response;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public class UserResponse {
+
+    @NotNull
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
+    @Email
     private String email;
 
+    @NotBlank
     private String role;
 
     private LocalDateTime createdAt;
+
+    @NotBlank
+    private String token;
 
     public UserResponse() {
     }
@@ -27,6 +40,14 @@ public class UserResponse {
         this.email = email;
         this.role = role;
         this.createdAt = createdAt;
+    }
+    public UserResponse(Long id, String name, String email, String role, LocalDateTime createdAt, String token) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.token = token;
     }
 
     public Long getId() {
@@ -67,5 +88,13 @@ public class UserResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

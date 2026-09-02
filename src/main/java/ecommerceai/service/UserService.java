@@ -8,6 +8,7 @@ import ecommerceai.exception.UserNotFoundException;
 import ecommerceai.repository.IProductRepo;
 import ecommerceai.repository.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,23 +21,24 @@ public class UserService implements IUserService {
 
     IUserRepo userRepo;
 
-    public UserService(IUserRepo userRepo) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(IUserRepo userRepo,PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserResponse addUser(RegisterUserRequest request) {
 
         User user = new User();
-
         user.setName(request.getName());
-
         user.setEmail(request.getEmail());
 
-        user.setPassword(request.getPassword());
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encryptedPassword);
 
         user.setRole("CUSTOMER");
-
         user.setCreatedAt(LocalDateTime.now());
 
         User savedUser = userRepo.save(user);

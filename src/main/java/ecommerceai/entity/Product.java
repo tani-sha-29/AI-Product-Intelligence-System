@@ -1,9 +1,9 @@
 package ecommerceai.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -25,16 +25,12 @@ public class Product{
     @Size(min = 1)
     private String category;
 
-    @NotBlank
-    @Size(min = 1)
-    private Integer categoryId;
-
-    @NotBlank
-    @Size(min = 1)
-    @Email
+    @NotNull
+    @PositiveOrZero
     private Double price;
 
-    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String image;
 
     public Product(){

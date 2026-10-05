@@ -5,33 +5,43 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
+@Table(name = "products")
 public class Product{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, name="product_name",columnDefinition = "TEXT")
     @Size(min = 1)
     private String name;
 
     @NotBlank
     @Size(min = 5)
+    @Column(name = "description" ,columnDefinition = "TEXT")
     private String description;
 
     @NotBlank
     @Size(min = 1)
+    @Column(name = "category",columnDefinition = "TEXT")
     private String category;
 
     @NotNull
     @PositiveOrZero
+    @Column(name="price")
     private Double price;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false,name = "image_url",columnDefinition = "TEXT")
     private String image;
+
+    @JdbcTypeCode(SqlTypes.VECTOR)
+    @Column(name = "embedding", columnDefinition = "vector(512)")
+    private float[] embedding;
 
     public Product(){
     }
@@ -71,6 +81,12 @@ public class Product{
     }
     public String getImage(){
         return image;
+    }
+    public void setEmbedding(float[] embedding){
+        this.embedding=embedding;
+    }
+    public float[] getEmbedding(){
+        return embedding;
     }
 
 

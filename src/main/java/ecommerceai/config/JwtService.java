@@ -2,31 +2,33 @@ package ecommerceai.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    // Must be at least 256 bits long
+    // Must be a secure, Base64-encoded 256-bit string
     private static final String SECRET_KEY = "D8b84h52crbtjwU//gZc/7YMQRW/C7BF4KzqBVNPXGQ=";
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private SecretKey getSigningKey() {
+        // 0.12.6 safe way to decode Base64 and build a SecretKey
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 0.11.5 syntax requires algorithm parameter
+                .subject(username) // 0.12.6 changes setSubject() to subject()
+                .issuedAt(new Date(System.currentTimeMillis())) // 0.12.6 changes setIssuedAt() to issuedAt()
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -44,11 +46,20 @@ public class JwtService {
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parserBuilder() // 0.11.5 uses parserBuilder()
-                .setSigningKey(getSigningKey())     // 0.11.5 uses setSigningKey()
+        final Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
         return claimsResolver.apply(claims);
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 }
